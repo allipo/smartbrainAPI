@@ -9,12 +9,20 @@ const image = require("./controllers/image");
 
 const db = knex({
   client: "pg",
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: {
-      rejectUnauthorized: false,
-    },
-  },
+  connection: process.env.DATABASE_URL
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      }
+    : {
+        host: "127.0.0.1",
+        port: 5432,
+        user: "postgres",
+        password: "1121",
+        database: "smartbrain",
+      },
 });
 
 const app = express();
@@ -45,6 +53,6 @@ app.post("/imageurl", (req, res) => {
   image.handleApiCall(req, res);
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log(`app is running on port ${process.env.PORT}`);
+app.listen(process.env.PORT || 5000, () => {
+  console.log(`app is running on port ${process.env.PORT || 5000}`);
 });
